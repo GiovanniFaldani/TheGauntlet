@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h" 
+#include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "CPP_Character.generated.h"
 
@@ -34,16 +36,16 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
 	float HP;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputMappingContext> FirstPersonContext;
+	TObjectPtr<UInputMappingContext> InputMappingContext;
 
 	// Move Input Actions
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> MoveAction;
+
+	// Camera Input Actions
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> CameraAction;
 
 	// Jump Input Actions
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -52,6 +54,20 @@ protected:
 	// Interact Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> InteractAction;
+
+	// Camera
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	TObjectPtr<UCameraComponent> Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	TObjectPtr<USpringArmComponent> Arm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	float CameraDistance;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame
@@ -63,6 +79,10 @@ public:
 	// Handles 2D Movement Input
 	UFUNCTION()
 	void Move(const FInputActionValue& Value);
+
+	// Handles Camera movement
+	UFUNCTION()
+	void MoveCamera(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, Category = Player)
 	void OnInteract();

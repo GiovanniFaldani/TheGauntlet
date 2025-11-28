@@ -13,5 +13,9 @@ UCLASS()
 class THEGAUNTLET_API UCPP_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Category = LevelControl)
+	void LoadLevel(FName LevelName);
 	
 };

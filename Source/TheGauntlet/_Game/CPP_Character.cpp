@@ -9,6 +9,25 @@ ACPP_Character::ACPP_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Set up camera
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	//Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);  // First Person camera
+
+	Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	Arm->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Arm->TargetArmLength = CameraDistance;
+	Arm->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
+
+	// tweak if necessary
+	Arm->bEnableCameraLag = false; 
+	Arm->CameraLagSpeed = 2;
+	Arm->CameraLagMaxDistance = 1.5f;
+
+	Arm->bEnableCameraRotationLag = false;
+	Arm->CameraRotationLagSpeed = 4;
+	Arm->CameraLagMaxTimeStep = 1;
+
+	Camera->AttachToComponent(Arm, FAttachmentTransformRules::SnapToTargetNotIncludingScale, USpringArmComponent::SocketName);
 }
 
 // Called when the game starts or when spawned
@@ -24,7 +43,10 @@ void ACPP_Character::BeginPlay()
 		// Get the enhanced input local player subsystem and add a new input mapping context to it
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			Subsystem->AddMappingContext(FirstPersonContext, 0);
+			Subsystem->AddMappingContext(InputMappingContext, 0);
+			FInputModeGameOnly InputModeData;
+			PlayerController->SetInputMode(InputModeData);
+			PlayerController->bShowMouseCursor = false;
 		}
 	}
 	// Display a debug message for five seconds. 
@@ -50,6 +72,9 @@ void ACPP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		// Bind Movement Actions
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACPP_Character::Move);
 
+		// Bind Camera Actions
+		EnhancedInputComponent->BindAction(CameraAction, ETriggerEvent::Triggered, this, &ACPP_Character::MoveCamera);
+
 		// Bind Jump Actions
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -66,13 +91,24 @@ void ACPP_Character::Move(const FInputActionValue& Value)
 
 	if (IsValid(Controller))
 	{
-		const FVector Right = GetActorRightVector();
+		const FVector Right = Camera->GetRightVector();
 		AddMovementInput(Right, MovementValue.X);
 
 		// Add forward and back movement
-		const FVector Forward = GetActorForwardVector();
+		const FVector Forward = Camera->GetForwardVector();
 		AddMovementInput(Forward, MovementValue.Y);
 
+	}
+}
+
+void ACPP_Character::MoveCamera(const FInputActionValue& Value)
+{
+	const FVector2D MovementValue = Value.Get<FVector2D>();
+
+	if (IsValid(Controller))
+	{
+		AddControllerYawInput(-MovementValue.X);
+		AddControllerPitchInput(MovementValue.Y);
 	}
 }
 

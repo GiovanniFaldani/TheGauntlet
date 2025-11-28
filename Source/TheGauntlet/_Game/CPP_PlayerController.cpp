@@ -3,3 +3,7 @@
 
 #include "_Game/CPP_PlayerController.h"
 
+void ACPP_PlayerController::BeginPlay()
+{
+	this->bShowMouseCursor = false;
+}

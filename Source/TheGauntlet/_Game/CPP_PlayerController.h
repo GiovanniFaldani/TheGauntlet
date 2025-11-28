@@ -13,5 +13,7 @@ UCLASS()
 class THEGAUNTLET_API ACPP_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };
