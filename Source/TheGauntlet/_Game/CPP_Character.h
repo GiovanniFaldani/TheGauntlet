@@ -18,7 +18,7 @@ class UInputComponent;
 
 // Delegate declarations
 DECLARE_MULTICAST_DELEGATE(OnGameOver)
-DECLARE_DELEGATE(OnInteract)
+DECLARE_MULTICAST_DELEGATE(OnInteract)
 
 UCLASS()
 class THEGAUNTLET_API ACPP_Character : public ACharacter
@@ -65,6 +65,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	float CameraDistance;
 
+	// Inventory
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory)
+	bool bHasKey;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -89,5 +93,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Player)
 	void ReceiveDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable, Category = Inventory)
+	void SetKeyCollected(bool Value);
 
 };

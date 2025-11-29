@@ -2,6 +2,7 @@
 
 
 #include "_Game/CPP_Character.h"
+#include "CPP_Character.h"
 
 // Sets default values
 ACPP_Character::ACPP_Character()
@@ -107,6 +108,7 @@ void ACPP_Character::MoveCamera(const FInputActionValue& Value)
 
 	if (IsValid(Controller))
 	{
+		// Camera pitch and yaw
 		AddControllerYawInput(-MovementValue.X);
 		AddControllerPitchInput(MovementValue.Y);
 	}
@@ -115,7 +117,7 @@ void ACPP_Character::MoveCamera(const FInputActionValue& Value)
 void ACPP_Character::OnInteract()
 {
 	GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Red, TEXT("Interact!"));
-	onInteract.ExecuteIfBound();
+	onInteract.Broadcast(); // Always safe even when empty
 }
 
 void ACPP_Character::ReceiveDamage(float Damage)
@@ -123,5 +125,10 @@ void ACPP_Character::ReceiveDamage(float Damage)
 	// TODO Game over check
 }
 
+void ACPP_Character::SetKeyCollected(bool Value)
+{
+	bHasKey = Value;
+}
 
-// TODO Add Third Person camera control
+
+// TODO Add Game Over function

@@ -17,5 +17,8 @@ class THEGAUNTLET_API UCPP_GameInstance : public UGameInstance
 public:
 	UFUNCTION(BlueprintCallable, Category = LevelControl)
 	void LoadLevel(FName LevelName);
+
+	UFUNCTION(BlueprintCallable, Category = LevelControl)
+	void QuitGame();
 	
 };
