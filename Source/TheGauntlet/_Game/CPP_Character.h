@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Interfaces/Interactable.h"
+#include "Components/InteractionComponent.h"
 #include "CPP_Character.generated.h"
 
 // Forward declarations for movement
@@ -18,7 +20,7 @@ class UInputComponent;
 
 // Delegate declarations
 DECLARE_MULTICAST_DELEGATE(OnGameOver)
-DECLARE_MULTICAST_DELEGATE(OnInteract)
+DECLARE_MULTICAST_DELEGATE(OnLevelComplete)
 
 UCLASS()
 class THEGAUNTLET_API ACPP_Character : public ACharacter
@@ -30,7 +32,7 @@ public:
 	ACPP_Character();
 
 	OnGameOver onGameOver;
-	OnInteract onInteract;
+	OnLevelComplete onLevelComplete;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
@@ -68,6 +70,10 @@ protected:
 	// Inventory
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory)
 	bool bHasKey;
+
+	// Interaction
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
+	TObjectPtr<UInteractionComponent> InteractionComponent;
 
 protected:
 	// Called when the game starts or when spawned

@@ -2,7 +2,6 @@
 
 
 #include "_Game/CPP_Character.h"
-#include "CPP_Character.h"
 
 // Sets default values
 ACPP_Character::ACPP_Character()
@@ -29,6 +28,9 @@ ACPP_Character::ACPP_Character()
 	Arm->CameraLagMaxTimeStep = 1;
 
 	Camera->AttachToComponent(Arm, FAttachmentTransformRules::SnapToTargetNotIncludingScale, USpringArmComponent::SocketName);
+
+	// Set up interaction component
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("Interaction"));
 }
 
 // Called when the game starts or when spawned
@@ -116,19 +118,31 @@ void ACPP_Character::MoveCamera(const FInputActionValue& Value)
 
 void ACPP_Character::OnInteract()
 {
+	check(GEngine != nullptr);
+
 	GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Red, TEXT("Interact!"));
-	onInteract.Broadcast(); // Always safe even when empty
+
+	// Get ClosestActor from InteractionComponent and call Interact() on it.
+	if (InteractionComponent->ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+	{
+		GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::Red, TEXT("Found interactable!"));
+		//IInteractable* ToInteract = Cast<IInteractable>(InteractionComponent->ClosestActor);
+		IInteractable::Execute_Interact(InteractionComponent->ClosestActor);
+	}
 }
 
 void ACPP_Character::ReceiveDamage(float Damage)
 {
 	// TODO Game over check
+	HP -= Damage;
+	if (HP <= .0f) 
+	{
+		onGameOver.Broadcast();
+	}
+	
 }
 
 void ACPP_Character::SetKeyCollected(bool Value)
 {
 	bHasKey = Value;
 }
-
-
-// TODO Add Game Over function

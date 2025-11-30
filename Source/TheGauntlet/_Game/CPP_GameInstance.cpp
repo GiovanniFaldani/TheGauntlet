@@ -4,7 +4,6 @@
 #include "_Game/CPP_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "CPP_GameInstance.h"
 
 void UCPP_GameInstance::LoadLevel(FName LevelName)
 {
