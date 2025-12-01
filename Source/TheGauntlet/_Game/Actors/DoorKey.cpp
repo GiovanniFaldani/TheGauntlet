@@ -21,17 +21,13 @@ void ADoorKey::BeginPlay()
 	Super::BeginPlay();	
 
 	// Subscribe to player delegate
-	UWorld* World = GetWorld();
-	if(IsValid(World))
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (IsValid(PlayerController))
 	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
-		if (IsValid(PlayerController))
+		ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
+		if (IsValid(PlayerCharacter))
 		{
-			ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
-			if (IsValid(PlayerCharacter))
-			{
-				PlayerCharacter->onKeyCollected.AddUObject(this, &ADoorKey::DestroyActor);
-			}
+			PlayerCharacter->onKeyCollected.AddUObject(this, &ADoorKey::DestroyActor);
 		}
 	}
 }
@@ -46,18 +42,14 @@ void ADoorKey::Tick(float DeltaTime)
 void ADoorKey::Interact_Implementation()
 {
 	check(GEngine != nullptr);
-	UWorld* World = GetWorld();
-	if (IsValid(World))
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (IsValid(PlayerController))
 	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
-		if (IsValid(PlayerController))
+		ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
+		if (IsValid(PlayerCharacter))
 		{
-			ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
-			if (IsValid(PlayerCharacter))
-			{
-				PlayerCharacter->SetKeyCollected(true);
-				GEngine->AddOnScreenDebugMessage(40, 1.0f, FColor::Blue, TEXT("Collected Key"));
-			}
+			PlayerCharacter->SetKeyCollected(true);
+			GEngine->AddOnScreenDebugMessage(40, 1.0f, FColor::Blue, TEXT("Collected Key"));
 		}
 	}
 }

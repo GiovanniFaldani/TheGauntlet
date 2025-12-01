@@ -126,7 +126,7 @@ void ACPP_Character::OnInteract()
 	GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Red, TEXT("Interact!"));
 
 	// Get ClosestActor from InteractionComponent and call Interact() on it.
-	if (InteractionComponent->ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+	if (IsValid(InteractionComponent->ClosestActor) && InteractionComponent->ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 	{
 		//GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::Red, TEXT("Found interactable!"));
 		IInteractable::Execute_Interact(InteractionComponent->ClosestActor);

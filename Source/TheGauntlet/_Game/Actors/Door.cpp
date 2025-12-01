@@ -19,17 +19,13 @@ void ADoor::BeginPlay()
 	Super::BeginPlay();
 
 	// subscribe to player delegate
-	UWorld* World = GetWorld();
-	if (IsValid(World))
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (IsValid(PlayerController))
 	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
-		if (IsValid(PlayerController))
+		ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
+		if (IsValid(PlayerCharacter))
 		{
-			ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
-			if (IsValid(PlayerCharacter))
-			{
-				PlayerCharacter->onKeyCollected.AddUObject(this, &ADoor::DestroyActor);
-			}
+			PlayerCharacter->onKeyCollected.AddUObject(this, &ADoor::DestroyActor);
 		}
 	}
 	
