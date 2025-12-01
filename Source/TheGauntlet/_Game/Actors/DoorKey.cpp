@@ -11,13 +11,29 @@ ADoorKey::ADoorKey()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Add up and down movement
+	MovementComponent = CreateDefaultSubobject<UMoveUpAndDownComponent>(TEXT("MoveUpAndDown"));
 }
 
 // Called when the game starts or when spawned
 void ADoorKey::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
+
+	// Subscribe to player delegate
+	UWorld* World = GetWorld();
+	if(IsValid(World))
+	{
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
+		if (IsValid(PlayerController))
+		{
+			ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
+			if (IsValid(PlayerCharacter))
+			{
+				PlayerCharacter->onKeyCollected.AddUObject(this, &ADoorKey::DestroyActor);
+			}
+		}
+	}
 }
 
 // Called every frame
@@ -30,18 +46,25 @@ void ADoorKey::Tick(float DeltaTime)
 void ADoorKey::Interact_Implementation()
 {
 	check(GEngine != nullptr);
-
-	GEngine->AddOnScreenDebugMessage(12, 1.0f, FColor::Blue, TEXT("Getting player..."));
 	UWorld* World = GetWorld();
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
-
-	ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
-	if (IsValid(PlayerCharacter))
+	if (IsValid(World))
 	{
-		PlayerCharacter->SetKeyCollected(true);
-		GEngine->AddOnScreenDebugMessage(40, 1.0f, FColor::Blue, TEXT("Collected Key"));
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
+		if (IsValid(PlayerController))
+		{
+			ACPP_Character* PlayerCharacter = Cast<ACPP_Character>(PlayerController->GetCharacter());
+			if (IsValid(PlayerCharacter))
+			{
+				PlayerCharacter->SetKeyCollected(true);
+				GEngine->AddOnScreenDebugMessage(40, 1.0f, FColor::Blue, TEXT("Collected Key"));
+			}
+		}
 	}
+}
 
-	// TODO Destroy this actor
+void ADoorKey::DestroyActor()
+{
+	// Subscribe to player delegate and destroy actor when collected
+	this->Destroy();
 }
 

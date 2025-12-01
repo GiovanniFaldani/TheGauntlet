@@ -4,23 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../Interfaces/Interactable.h"
-#include "../Components/MoveUpAndDownComponent.h"
-#include "DoorKey.generated.h"
+#include "Door.generated.h"
 
 UCLASS()
-class THEGAUNTLET_API ADoorKey : public AActor, public IInteractable
+class THEGAUNTLET_API ADoor : public AActor
 {
 	GENERATED_BODY()
 	
-public:
-	// Actor components
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MoveUpAndDownComponent")
-	TObjectPtr<UMoveUpAndDownComponent> MovementComponent;
-
 public:	
 	// Sets default values for this actor's properties
-	ADoorKey();
+	ADoor();
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,9 +24,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	virtual void Interact_Implementation() override;
-
-
 
 };

@@ -13,5 +13,19 @@ UCLASS()
 class THEGAUNTLET_API ACPP_GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Game Mode")
+	float FallDamage;
+
+protected:
+	virtual void BeginPlay() override;
 	
+
+public:
+	void PlayerFell();
+
+	void GameVictory();
+
+	void GameOver();
 };

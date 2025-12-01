@@ -55,7 +55,7 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	{
 		DrawDebugSphere(
 			GetWorld(),
-			ClosestActor->GetActorLocation(),  // Could not work, refactor this to just do nothing if that's the case
+			ClosestActor->GetActorLocation(),
 			200.f,
 			12,
 			FColor::Emerald,
@@ -65,6 +65,13 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 			10.f
 		);
 
+	}
+
+	// TODO add interact message for player here if interactable actor (Push to widget stack ingame)
+	if (IsValid(ClosestActor) && ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+	{
+		check(GEngine != nullptr);
+		GEngine->AddOnScreenDebugMessage(15, 0.1f, FColor::Green, TEXT("Press E to interact"));
 	}
 }
 

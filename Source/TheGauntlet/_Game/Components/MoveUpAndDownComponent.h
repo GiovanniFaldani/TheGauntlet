@@ -16,6 +16,21 @@ public:
 	// Sets default values for this component's properties
 	UMoveUpAndDownComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoveUpAndDown")
+	float MoveSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoveUpAndDown")
+	float MovementAmplitude;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoveUpAndDown")
+	float ElapsedTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoveUpAndDown")
+	FName TagToSearch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoveUpAndDown")
+	UStaticMeshComponent* MeshToMove;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

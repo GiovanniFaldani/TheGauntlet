@@ -5,22 +5,24 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../Interfaces/Interactable.h"
-#include "../Components/MoveUpAndDownComponent.h"
-#include "DoorKey.generated.h"
+#include "../Interfaces/Damageable.h"
+#include "DestructibleBlock.generated.h"
 
 UCLASS()
-class THEGAUNTLET_API ADoorKey : public AActor, public IInteractable
+class THEGAUNTLET_API ADestructibleBlock : public AActor, public IInteractable, public IDamageable
 {
 	GENERATED_BODY()
-	
-public:
-	// Actor components
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MoveUpAndDownComponent")
-	TObjectPtr<UMoveUpAndDownComponent> MovementComponent;
 
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
+	float MaxHP;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Player)
+	float HP;
+	
 public:	
 	// Sets default values for this actor's properties
-	ADoorKey();
+	ADestructibleBlock();
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,6 +36,6 @@ public:
 
 	virtual void Interact_Implementation() override;
 
-
+	virtual void ReceiveDamage_Implementation(float DamageReceived) override;
 
 };

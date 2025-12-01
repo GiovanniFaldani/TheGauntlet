@@ -38,6 +38,9 @@ void ACPP_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Set health variable
+	HP = MaxHP;
+
 	check(GEngine != nullptr);
 
 	// Get the player controller for this character
@@ -125,24 +128,38 @@ void ACPP_Character::OnInteract()
 	// Get ClosestActor from InteractionComponent and call Interact() on it.
 	if (InteractionComponent->ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::Red, TEXT("Found interactable!"));
-		//IInteractable* ToInteract = Cast<IInteractable>(InteractionComponent->ClosestActor);
+		//GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::Red, TEXT("Found interactable!"));
 		IInteractable::Execute_Interact(InteractionComponent->ClosestActor);
 	}
 }
 
-void ACPP_Character::ReceiveDamage(float Damage)
+void ACPP_Character::ReceiveDamage_Implementation(float DamageReceived)
 {
-	// TODO Game over check
-	HP -= Damage;
+	HP -= DamageReceived;
 	if (HP <= .0f) 
 	{
 		onGameOver.Broadcast();
 	}
-	
 }
 
 void ACPP_Character::SetKeyCollected(bool Value)
 {
 	bHasKey = Value;
+	// delegate execution to open door and destroy key
+	if (Value) onKeyCollected.Broadcast();
+}
+
+float ACPP_Character::GetMaxHP()
+{
+	return MaxHP;
+}
+
+float ACPP_Character::GetCurrentHP()
+{
+	return HP;
+}
+
+float ACPP_Character::GetDamage()
+{
+	return DamageDealt;
 }

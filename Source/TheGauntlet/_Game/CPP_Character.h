@@ -10,6 +10,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Interfaces/Interactable.h"
+#include "Interfaces/Damageable.h"
 #include "Components/InteractionComponent.h"
 #include "CPP_Character.generated.h"
 
@@ -20,10 +21,12 @@ class UInputComponent;
 
 // Delegate declarations
 DECLARE_MULTICAST_DELEGATE(OnGameOver)
+DECLARE_MULTICAST_DELEGATE(OnFallOutOFWorld)
 DECLARE_MULTICAST_DELEGATE(OnLevelComplete)
+DECLARE_MULTICAST_DELEGATE(OnKeyCollected)
 
 UCLASS()
-class THEGAUNTLET_API ACPP_Character : public ACharacter
+class THEGAUNTLET_API ACPP_Character : public ACharacter, public IDamageable
 {
 	GENERATED_BODY()
 
@@ -31,12 +34,22 @@ public:
 	// Sets default values for this character's properties
 	ACPP_Character();
 
+	// Delegates
 	OnGameOver onGameOver;
+	OnFallOutOFWorld onFallOutOfWorld;
 	OnLevelComplete onLevelComplete;
+	OnKeyCollected onKeyCollected;
 
 protected:
+	// Damage and HP
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
+	float MaxHP;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Player)
 	float HP;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
+	float DamageDealt;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputMappingContext> InputMappingContext;
@@ -95,12 +108,19 @@ public:
 	void MoveCamera(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, Category = Player)
-	void OnInteract();
+	float GetMaxHP();
 
 	UFUNCTION(BlueprintCallable, Category = Player)
-	void ReceiveDamage(float Damage);
+	float GetCurrentHP();
+
+	UFUNCTION(BlueprintCallable, Category = Player)
+	float GetDamage();
+
+	UFUNCTION(BlueprintCallable, Category = Player)
+	void OnInteract();
 
 	UFUNCTION(BlueprintCallable, Category = Inventory)
 	void SetKeyCollected(bool Value);
 
+	virtual void ReceiveDamage_Implementation(float DamageReceived) override;
 };
