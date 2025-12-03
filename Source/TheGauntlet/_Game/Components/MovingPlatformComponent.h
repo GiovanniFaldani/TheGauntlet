@@ -3,46 +3,47 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "MovingPlatform.generated.h"
+#include "Components/ActorComponent.h"
+#include "MovingPlatformComponent.generated.h"
 
-UCLASS()
-class THEGAUNTLET_API AMovingPlatform : public AActor
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class THEGAUNTLET_API UMovingPlatformComponent : public UActorComponent
 {
 	GENERATED_BODY()
-	
+
 public:	
-	// Sets default values for this actor's properties
-	AMovingPlatform();
-	 
+	// Sets default values for this component's properties
+	UMovingPlatformComponent();
+
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Moving Platform")
-	TArray<FVector> WayPoints{ };
+	TArray<FVector> WayPoints;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Moving Platform")
-	TArray<float> TravelTimes{ };
+	TArray<float> TravelTimes;
 
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Moving Platform")
-	FVector StartPosition{ };
+	FVector StartPosition;
 
 	UPROPERTY(EditAnywhere, Category = "Moving Platform")
-	int CurrentIndex{ 1 };
+	int CurrentIndex;
 
 	UPROPERTY(EditAnywhere, Category = "Moving Platform")
-	float PercentageComplete{ 0. };
+	float PercentageComplete;
 
 	UPROPERTY(EditAnywhere, Category = "Moving Platform")
-	float ElapsedTime{ 0. };
+	float ElapsedTime;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
 	void MoveBetweenWaypoints(float DeltaTime);

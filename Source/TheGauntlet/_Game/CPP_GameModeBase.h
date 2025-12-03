@@ -18,6 +18,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Game Mode")
 	float FallDamage;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Game Mode")
+	FVector RespawnPoint;
+
 protected:
 	virtual void BeginPlay() override;
 	

@@ -37,6 +37,7 @@ void ACPP_GameModeBase::PlayerFell()
 			IDamageable::Execute_ReceiveDamage(PlayerCharacter, FallDamage);
 
 			// TODO Respawn player on PlayerStart
+			PlayerCharacter->SetActorLocation(RespawnPoint);
 		}
 	}
 }
@@ -44,6 +45,8 @@ void ACPP_GameModeBase::PlayerFell()
 void ACPP_GameModeBase::GameVictory()
 {
 	// Check for victory condition
+	check(GEngine);
+	GEngine->AddOnScreenDebugMessage(25, 5.0f, FColor::Yellow, TEXT("Goal Reached!"));
 }
 
 void ACPP_GameModeBase::GameOver()
