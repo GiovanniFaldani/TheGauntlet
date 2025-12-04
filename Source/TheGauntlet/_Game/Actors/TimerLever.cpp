@@ -9,6 +9,8 @@ ATimerLever::ATimerLever()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Add switch mesh
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 }
 
 // Called when the game starts or when spawned
@@ -27,25 +29,33 @@ void ATimerLever::Tick(float DeltaTime)
 
 void ATimerLever::ActivateLever()
 {
-	// TODO move lever in world
+	// TODO change switch color to green
 	onLeverPull.ExecuteIfBound();
+	bIsActive = true;
+
+	Mesh->SetMaterial(0, GreenMaterial);
+
+	// Start timer
+	GetWorld()->GetTimerManager().SetTimer(
+		RespawnTimer,
+		this,
+		&ATimerLever::DeactivateLever,
+		LeverTimer,
+		false
+	);
 }
 
 void ATimerLever::DeactivateLever()
 {
-	// TODO move lever in world back
+	// TODO change switch color to red
 	onLeverUndo.ExecuteIfBound();
+	bIsActive = false;
+
+	Mesh->SetMaterial(0, RedMaterial);
 }
 
 void ATimerLever::Interact_Implementation()
 {
-	if (bIsActive) 
-	{
-		DeactivateLever();
-	}
-	else
-	{
-		ActivateLever();
-	}
+	ActivateLever();
 }
 

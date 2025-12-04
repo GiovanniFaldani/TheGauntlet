@@ -27,6 +27,22 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Lever")
 	bool bIsActive;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Lever")
+	float LeverTimer;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Timer Lever")
+	FTimerHandle RespawnTimer;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Lever")
+	UMaterialInstance* GreenMaterial;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Lever")
+	UMaterialInstance* RedMaterial;
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Lever")
+	UStaticMeshComponent* Mesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

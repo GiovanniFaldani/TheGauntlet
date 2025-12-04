@@ -2,7 +2,6 @@
 
 
 #include "_Game/Actors/TimerDoor.h"
-#include "TimerLever.h"
 
 // Sets default values
 ATimerDoor::ATimerDoor()
@@ -22,6 +21,14 @@ void ATimerDoor::BeginPlay()
 	Super::BeginPlay();
 	
 	// TODO attach to lever delegates
+
+	// Get lever reference
+	if (IsValid(LeverReference))
+	{
+		LeverReference->onLeverPull.BindUObject(this, &ATimerDoor::Deactivate);
+		LeverReference->onLeverUndo.BindUObject(this, &ATimerDoor::Activate);
+	}
+	
 }
 
 // Called every frame
@@ -33,11 +40,34 @@ void ATimerDoor::Tick(float DeltaTime)
 
 void ATimerDoor::Deactivate()
 {
+	bIsActive = false;
 
+	SetActorHiddenInGame(!bIsActive);
+	SetActorEnableCollision(bIsActive);
+	SetActorTickEnabled(bIsActive);
+
+	check(GEngine);
+	GEngine->AddOnScreenDebugMessage(19, 5.0f, FColor::Red, TEXT("Deactivated red door!"));
+
+	// Start timer
+	GetWorld()->GetTimerManager().SetTimer(
+		RespawnTimer,
+		this,
+		&ATimerDoor::Activate,
+		DoorTimer,
+		false
+	);
 }
 
 void ATimerDoor::Activate()
 {
+	bIsActive = true;
 
+	SetActorHiddenInGame(!bIsActive);
+	SetActorEnableCollision(bIsActive);
+	SetActorTickEnabled(bIsActive);
+
+	check(GEngine);
+	GEngine->AddOnScreenDebugMessage(18, 5.0f, FColor::Red, TEXT("Reactivated red door!"));
 }
 

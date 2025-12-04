@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "TimerLever.h"
+#include "Engine/TimerHandle.h"
 #include "TimerDoor.generated.h"
 
 UCLASS()
@@ -20,12 +22,21 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Door")
 	bool bIsActive;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Door")
+	float DoorTimer;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Timer Door")
+	FTimerHandle RespawnTimer;
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Door")
 	UStaticMeshComponent* Mesh;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Door")
 	UBoxComponent* Collision;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Timer Door")
+	ATimerLever* LeverReference;
 
 protected:
 	// Called when the game starts or when spawned
