@@ -58,8 +58,6 @@ void ACPP_Character::BeginPlay()
 	// Display a debug message for five seconds. 
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using CPP_Character."));
-
-	onHealthChanged.Broadcast(HP, MaxHP);
 }
 
 // Called every frame
@@ -155,7 +153,6 @@ void ACPP_Character::OnInteract()
 void ACPP_Character::ReceiveDamage_Implementation(float DamageReceived)
 {
 	HP -= DamageReceived;
-	onHealthChanged.Broadcast(HP, MaxHP);
 	if (HP <= .0f) 
 	{
 		onGameOver.Broadcast();

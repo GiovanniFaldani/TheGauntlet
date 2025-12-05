@@ -57,8 +57,6 @@ void ATimerDoor::Deactivate()
 		DoorTimer,
 		false
 	);
-
-	GetWorld()->GetTimerManager().ClearTimer(RespawnTimer);
 }
 
 void ATimerDoor::Activate()

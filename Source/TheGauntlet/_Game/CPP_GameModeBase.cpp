@@ -3,7 +3,6 @@
 
 #include "_Game/CPP_GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blueprint/UserWidget.h"
 #include "CPP_Character.h"
 
 void ACPP_GameModeBase::BeginPlay()
@@ -20,31 +19,7 @@ void ACPP_GameModeBase::BeginPlay()
 			PlayerCharacter->onLevelComplete.AddUObject(this, &ACPP_GameModeBase::GameVictory);
 		}
 	}
-
-	GameInstanceRef = Cast<UCPP_GameInstance>(GetGameInstance());
 	
-}
-
-void ACPP_GameModeBase::ShowEndGameWidget(TSubclassOf<UUserWidget> WidgetClass)
-{
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	if (IsValid(PlayerController))
-	{
-		// Create Widget
-		UUserWidget* EndGameWidget = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
-		if (EndGameWidget)
-		{
-			EndGameWidget->AddToViewport();
-
-			// Set Input Mode to UI Only so the mouse appears
-			FInputModeUIOnly InputMode;
-			InputMode.SetWidgetToFocus(EndGameWidget->TakeWidget());
-			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-
-			PlayerController->SetInputMode(InputMode);
-			PlayerController->bShowMouseCursor = true;
-		}
-	}
 }
 
 void ACPP_GameModeBase::PlayerFell()
@@ -61,7 +36,7 @@ void ACPP_GameModeBase::PlayerFell()
 			// Call IDamageable method
 			IDamageable::Execute_ReceiveDamage(PlayerCharacter, FallDamage);
 
-			// Respawn player on PlayerStart
+			// TODO Respawn player on PlayerStart
 			PlayerCharacter->SetActorLocation(RespawnPoint);
 		}
 	}
@@ -69,50 +44,12 @@ void ACPP_GameModeBase::PlayerFell()
 
 void ACPP_GameModeBase::GameVictory()
 {
+	// Check for victory condition
 	check(GEngine);
 	GEngine->AddOnScreenDebugMessage(25, 5.0f, FColor::Yellow, TEXT("Goal Reached!"));
-
-	// Freeze player
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreMoveInput(true);
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreLookInput(true);
-
-	// Show the Victory Widget
-	ShowEndGameWidget(VictoryWidgetClass);
-	
-	// Start timer to main menu
-	if (IsValid(GameInstanceRef))
-	{
-		FTimerDelegate ToCall = FTimerDelegate::CreateUObject(GameInstanceRef, &UCPP_GameInstance::LoadLevel, FName("MainMenu"));
-		GetWorld()->GetTimerManager().SetTimer(
-			RestartTimer,
-			ToCall,
-			TimeUntilMainMenu,
-			false
-		);
-	}
 }
 
 void ACPP_GameModeBase::GameOver()
 {
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(35, 5.0f, FColor::Yellow, TEXT("Game Over!"));
-
-	// Freeze player
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreMoveInput(true);
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreLookInput(true);
-
-	// Show the Game Over Widget
-	ShowEndGameWidget(GameOverWidgetClass);
-
-	// Start timer to main menu
-	if (IsValid(GameInstanceRef))
-	{
-		FTimerDelegate ToCall = FTimerDelegate::CreateUObject(GameInstanceRef, &UCPP_GameInstance::LoadLevel, FName("MainMenu"));
-		GetWorld()->GetTimerManager().SetTimer(
-			RestartTimer,
-			ToCall,
-			TimeUntilMainMenu,
-			false
-		);
-	}
+	// Check for game over condition
 }
