@@ -16,4 +16,17 @@ class THEGAUNTLET_API ACPP_PlayerController : public APlayerController
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void SetupInputComponent() override;
+
+	// Helper to bind to the Pawn's delegates
+	void BindToPawnDelegates(APawn* InPawn);
+
+	// Callback when the Pawn broadcasts a health change
+	UFUNCTION()
+	void HandlePawnHealthChanged(float NewHealth, float MaxHealth);
+
+	// Callback when the Pawn broadcasts interactable actor found
+	UFUNCTION()
+	void HandleInteractionMessage(bool Found);
 };
