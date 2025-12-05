@@ -40,6 +40,9 @@ public:
 	OnLevelComplete onLevelComplete;
 	OnKeyCollected onKeyCollected;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
+	float InteractCooldown;
+
 protected:
 	// Damage and HP
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Player)
@@ -87,6 +90,12 @@ protected:
 	// Interaction
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
 	TObjectPtr<UInteractionComponent> InteractionComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
+	bool CanInteract;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
+	float InteractTimer;
 
 protected:
 	// Called when the game starts or when spawned

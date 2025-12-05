@@ -1,11 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "_Game/Actors/TimerLever.h"
-#include "SingleSwitch.h"
+#include "_Game/Actors/SingleSwitch.h"
 
 // Sets default values
-ATimerLever::ATimerLever()
+ASingleSwitch::ASingleSwitch()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,46 +14,45 @@ ATimerLever::ATimerLever()
 }
 
 // Called when the game starts or when spawned
-void ATimerLever::BeginPlay()
+void ASingleSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ATimerLever::Tick(float DeltaTime)
+void ASingleSwitch::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ATimerLever::ActivateLever()
+void ASingleSwitch::ActivateSwitch()
 {
-	onLeverPull.ExecuteIfBound();
 	bIsActive = true;
+	Mesh->SetMaterial(0, BlueMaterial);
+	Door->SetSwitchTo(bIsActive, SwitchIndex);
 
-	Mesh->SetMaterial(0, GreenMaterial);
-
-	// Start timer
-	GetWorld()->GetTimerManager().SetTimer(
-		RespawnTimer,
-		this,
-		&ATimerLever::DeactivateLever,
-		LeverTimer,
-		false
-	);
 }
 
-void ATimerLever::DeactivateLever()
+void ASingleSwitch::DeactivateSwitch()
 {
-	onLeverUndo.ExecuteIfBound();
 	bIsActive = false;
-
 	Mesh->SetMaterial(0, RedMaterial);
+	Door->SetSwitchTo(bIsActive, SwitchIndex);
+	
 }
 
-void ATimerLever::Interact_Implementation()
+void ASingleSwitch::Interact_Implementation()
 {
-	ActivateLever();
+	
+	if (bIsActive)
+	{
+		DeactivateSwitch();
+	}
+	else
+	{
+		ActivateSwitch();
+	}
 }
 

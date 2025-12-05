@@ -65,6 +65,16 @@ void ACPP_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Count down interaction timer if active
+	if (InteractTimer >= 0)
+	{
+		InteractTimer -= DeltaTime;
+		if (InteractTimer <= 0)
+		{
+			CanInteract = true;
+		}
+	}
+
 }
 
 // Called to bind functionality to input
@@ -121,6 +131,8 @@ void ACPP_Character::MoveCamera(const FInputActionValue& Value)
 
 void ACPP_Character::OnInteract()
 {
+	if (!CanInteract) return;
+
 	check(GEngine != nullptr);
 
 	GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Red, TEXT("Interact!"));
@@ -131,6 +143,11 @@ void ACPP_Character::OnInteract()
 		//GEngine->AddOnScreenDebugMessage(11, 1.0f, FColor::Red, TEXT("Found interactable!"));
 		IInteractable::Execute_Interact(InteractionComponent->ClosestActor);
 	}
+
+	// Start timer to limit number of interactions per second
+	InteractTimer = InteractCooldown;
+	CanInteract = false;
+
 }
 
 void ACPP_Character::ReceiveDamage_Implementation(float DamageReceived)
