@@ -4,23 +4,20 @@
 #include "_Game/CPP_PlayerController.h"
 #include "UI/HUDWidget.h"
 #include "CPP_Character.h"
-//#include "Components/InteractionComponent.h"
+#include "Components/InteractionComponent.h"
 #include "GameFramework/Character.h" 
 
 void ACPP_PlayerController::BeginPlay()
 {
-	if (HUDWidgetClass)
-	{
-		HUDWidgetInstance = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
-		if (HUDWidgetInstance)
-		{
-			// Add to viewport (Standard UMG way) or use CommonUI's Root Layout if configured
-			HUDWidgetInstance->AddToViewport();
-			FInputModeGameOnly GameInputMode;
-			SetInputMode(GameInputMode);
-			bShowMouseCursor = false;
-		}
-	}
+	//if (!HUDWidgetClass) return;
+	//HUDWidgetInstance = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
+	//if (!HUDWidgetInstance) return;
+	// Add to viewport (Standard UMG way) or use CommonUI's Root Layout if configured
+	//HUDWidgetInstance->AddToViewport();
+	FInputModeGameOnly GameInputMode;
+	SetInputMode(GameInputMode);
+	bShowMouseCursor = false;
+	
 }
 
 // launches on Pawn posses (at level01 load in this case), use this to bind UI to player delegates
@@ -41,10 +38,10 @@ void ACPP_PlayerController::BindToPawnDelegates(APawn* InPawn)
 	if (IsValid(MyPlayer))
 	{
 		// Unbind first to prevent double binding
-		MyPlayer->onHealthChanged.RemoveDynamic(this, &ACPP_PlayerController::HandlePawnHealthChanged);
+		//MyPlayer->onHealthChanged.RemoveDynamic(this, &ACPP_PlayerController::HandlePawnHealthChanged);
 
 		// Bind	delegate
-		MyPlayer->onHealthChanged.AddDynamic(this, &ACPP_PlayerController::HandlePawnHealthChanged);
+		//MyPlayer->onHealthChanged.AddDynamic(this, &ACPP_PlayerController::HandlePawnHealthChanged);
 
 		// bind interaction component delegate
 		//UInteractionComponent* InteractComponent = Cast<UInteractionComponent>(MyPlayer->GetComponentByClass(UInteractionComponent::StaticClass()));
@@ -56,26 +53,26 @@ void ACPP_PlayerController::BindToPawnDelegates(APawn* InPawn)
 	}
 }
 
-void ACPP_PlayerController::HandlePawnHealthChanged(float NewHealth, float MaxHealth)
-{
-	if (HUDWidgetInstance)
-	{
-		HUDWidgetInstance->UpdateHealth(NewHealth, MaxHealth);
-	}
-}
-
-void ACPP_PlayerController::HandleInteractionMessage(bool Found)
-{
-	if (HUDWidgetInstance)
-	{
-		//HUDWidgetInstance->SetInteractionMessageVisibility(Found);
-	}
-}
-
-void ACPP_PlayerController::PublishUIMessage(FString Message)
-{
-	if (HUDWidgetInstance)
-	{
-		HUDWidgetInstance->DisplaySystemMessage(Message);
-	}
-}
+//void ACPP_PlayerController::HandlePawnHealthChanged(float NewHealth, float MaxHealth)
+//{
+//	if (HUDWidgetInstance)
+//	{
+//		HUDWidgetInstance->UpdateHealth(NewHealth, MaxHealth);
+//	}
+//}
+//
+//void ACPP_PlayerController::HandleInteractionMessage(bool Found)
+//{
+//	if (HUDWidgetInstance)
+//	{
+//		//HUDWidgetInstance->SetInteractionMessageVisibility(Found);
+//	}
+//}
+//
+//void ACPP_PlayerController::PublishUIMessage(FString Message)
+//{
+//	if (HUDWidgetInstance)
+//	{
+//		HUDWidgetInstance->DisplaySystemMessage(Message);
+//	}
+//}
