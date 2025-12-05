@@ -34,7 +34,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-	virtual void PlayerTick(float DeltaTime);
+	virtual void SetupInputComponent() override;
 
 	// Helper to bind to the Pawn's delegates
 	void BindToPawnDelegates(APawn* InPawn);

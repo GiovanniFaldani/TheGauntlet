@@ -137,4 +137,7 @@ public:
 	void SetKeyCollected(bool Value);
 
 	virtual void ReceiveDamage_Implementation(float DamageReceived) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	UInputMappingContext* GetInputMappingContext() const { return InputMappingContext; }
 };
