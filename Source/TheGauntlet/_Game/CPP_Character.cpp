@@ -13,7 +13,7 @@ ACPP_Character::ACPP_Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	Arm->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	Arm->SetupAttachment(RootComponent);
 	Arm->TargetArmLength = CameraDistance;
 	Arm->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
 
@@ -26,7 +26,7 @@ ACPP_Character::ACPP_Character()
 	Arm->CameraRotationLagSpeed = 4;
 	Arm->CameraLagMaxTimeStep = 1;
 
-	Camera->AttachToComponent(Arm, FAttachmentTransformRules::SnapToTargetNotIncludingScale, USpringArmComponent::SocketName);
+	Camera->SetupAttachment(Arm, USpringArmComponent::SocketName);
 
 	// Set up interaction component
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("Interaction"));
