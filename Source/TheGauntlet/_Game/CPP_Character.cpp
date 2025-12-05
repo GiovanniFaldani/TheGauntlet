@@ -6,7 +6,7 @@
 // Sets default values
 ACPP_Character::ACPP_Character()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set up camera
@@ -18,7 +18,7 @@ ACPP_Character::ACPP_Character()
 	Arm->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
 
 	// tweak if necessary
-	Arm->bEnableCameraLag = false; 
+	Arm->bEnableCameraLag = false;
 	Arm->CameraLagSpeed = 2;
 	Arm->CameraLagMaxDistance = 1.5f;
 
@@ -56,6 +56,8 @@ void ACPP_Character::BeginPlay()
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using CPP_Character."));
+
+	onHealthChanged.Broadcast(HP, MaxHP);
 }
 
 // Called every frame
@@ -99,7 +101,7 @@ void ACPP_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-void ACPP_Character::Move(const FInputActionValue& Value) 
+void ACPP_Character::Move(const FInputActionValue& Value)
 {
 	const FVector2D MovementValue = Value.Get<FVector2D>();
 
@@ -151,7 +153,8 @@ void ACPP_Character::OnInteract()
 void ACPP_Character::ReceiveDamage_Implementation(float DamageReceived)
 {
 	HP -= DamageReceived;
-	if (HP <= .0f) 
+	onHealthChanged.Broadcast(HP, MaxHP);
+	if (HP <= .0f)
 	{
 		onGameOver.Broadcast();
 	}

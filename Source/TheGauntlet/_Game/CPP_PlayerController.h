@@ -6,14 +6,31 @@
 #include "GameFramework/PlayerController.h"
 #include "CPP_PlayerController.generated.h"
 
+class UHUDWidget;
+
 /**
- * 
+ *
  */
 UCLASS()
 class THEGAUNTLET_API ACPP_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+protected:
+	// The class of the HUD to spawn (Assign this in BP_GauntletPlayerController)
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UHUDWidget> HUDWidgetClass;
+
+	// The actual instance of the HUD
+	UPROPERTY()
+	TObjectPtr<UHUDWidget> HUDWidgetInstance;
+
+public:
+	// Print message to screen from anywhere
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void PublishUIMessage(FString Message);
+
+protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
