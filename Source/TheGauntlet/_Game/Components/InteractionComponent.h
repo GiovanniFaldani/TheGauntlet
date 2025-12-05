@@ -7,6 +7,8 @@
 #include "../Interfaces/Interactable.h"
 #include "InteractionComponent.generated.h"
 
+/*DECLARE_DELEGATE(OnFindInteractable)
+DECLARE_DELEGATE(OnLoseInteractable)*/
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THEGAUNTLET_API UInteractionComponent : public UActorComponent
@@ -14,6 +16,10 @@ class THEGAUNTLET_API UInteractionComponent : public UActorComponent
 	GENERATED_BODY()
 
 public: 
+	// delegates for HUD
+	//OnFindInteractable onFindInteractable;
+	//OnLoseInteractable onLoseInteractable;
+
 public:
 	//** Trace Interaction Distance
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Interaction)

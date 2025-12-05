@@ -20,10 +20,12 @@ class UInputAction;
 class UInputComponent;
 
 // Delegate declarations
-DECLARE_MULTICAST_DELEGATE(OnGameOver)
-DECLARE_MULTICAST_DELEGATE(OnFallOutOFWorld)
-DECLARE_MULTICAST_DELEGATE(OnLevelComplete)
-DECLARE_MULTICAST_DELEGATE(OnKeyCollected)
+DECLARE_MULTICAST_DELEGATE(OnGameOver);
+DECLARE_MULTICAST_DELEGATE(OnFallOutOFWorld);
+DECLARE_MULTICAST_DELEGATE(OnLevelComplete);
+DECLARE_MULTICAST_DELEGATE(OnKeyCollected);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, NewHealth, float, MaxHealth);
 
 UCLASS()
 class THEGAUNTLET_API ACPP_Character : public ACharacter, public IDamageable
@@ -39,6 +41,9 @@ public:
 	OnFallOutOFWorld onFallOutOfWorld;
 	OnLevelComplete onLevelComplete;
 	OnKeyCollected onKeyCollected;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged onHealthChanged;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Interaction)
 	float InteractCooldown;
