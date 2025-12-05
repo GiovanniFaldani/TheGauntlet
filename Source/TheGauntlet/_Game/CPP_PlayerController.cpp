@@ -71,12 +71,12 @@ void ACPP_PlayerController::BindToPawnDelegates(APawn* InPawn)
 		MyPlayer->onHealthChanged.AddDynamic(this, &ACPP_PlayerController::HandlePawnHealthChanged);
 
 		// bind interaction component delegate
-		//UInteractionComponent* InteractComponent = Cast<UInteractionComponent>(MyPlayer->GetComponentByClass(UInteractionComponent::StaticClass()));
-		//if (IsValid(InteractComponent))
-		//{
-		//	InteractComponent->onFindInteractable.BindUObject(this, &ACPP_PlayerController::HandleInteractionMessage, true);
-		//	InteractComponent->onLoseInteractable.BindUObject(this, &ACPP_PlayerController::HandleInteractionMessage, false);
-		//}
+		UInteractionComponent* InteractComponent = Cast<UInteractionComponent>(MyPlayer->GetComponentByClass(UInteractionComponent::StaticClass()));
+		if (IsValid(InteractComponent))
+		{
+			InteractComponent->onFindInteractable.BindUObject(this, &ACPP_PlayerController::HandleInteractionMessage, true);
+			InteractComponent->onLoseInteractable.BindUObject(this, &ACPP_PlayerController::HandleInteractionMessage, false);
+		}
 	}
 }
 
@@ -92,7 +92,7 @@ void ACPP_PlayerController::HandleInteractionMessage(bool Found)
 {
 	if (HUDWidgetInstance)
 	{
-		//HUDWidgetInstance->SetInteractionMessageVisibility(Found);
+		HUDWidgetInstance->SetInteractionMessageVisibility(Found);
 	}
 }
 

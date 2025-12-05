@@ -31,9 +31,9 @@ void UHUDWidget::DisplaySystemMessage(FString Message)
 	}
 }
 
-//void UHUDWidget::SetInteractionMessageVisibility(bool Visible)
-//{
-//	InteractionPromptText->SetVisibility(Visible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
-//}
+void UHUDWidget::SetInteractionMessageVisibility(bool Visible)
+{
+	InteractionPromptText->SetVisibility(Visible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+}
 
 

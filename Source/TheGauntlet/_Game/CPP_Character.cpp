@@ -11,7 +11,6 @@ ACPP_Character::ACPP_Character()
 
 	// Set up camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	//Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);  // First Person camera
 
 	Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Arm->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -41,8 +40,6 @@ void ACPP_Character::BeginPlay()
 	// Set health variable
 	HP = MaxHP;
 
-	check(GEngine != nullptr);
-
 	// Get the player controller for this character
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -57,6 +54,7 @@ void ACPP_Character::BeginPlay()
 	}
 	// Display a debug message for five seconds. 
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
+	check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using CPP_Character."));
 
 	onHealthChanged.Broadcast(HP, MaxHP);

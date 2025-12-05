@@ -72,11 +72,11 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	{
 		check(GEngine != nullptr);
 		GEngine->AddOnScreenDebugMessage(15, 0.1f, FColor::Green, TEXT("Press E to interact"));
-		//onFindInteractable.ExecuteIfBound();
+		onFindInteractable.ExecuteIfBound();
 	}
 	else
 	{
-		//onLoseInteractable.ExecuteIfBound();
+		onLoseInteractable.ExecuteIfBound();
 	}
 }
 

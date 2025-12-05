@@ -26,8 +26,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UCommonTextBlock> SystemMessageText;
 
-/*	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UCommonTextBlock> InteractionPromptText*/;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UCommonTextBlock> InteractionPromptText;
 
 protected:
 	virtual void NativeConstruct() override;
@@ -43,7 +43,7 @@ public:
 	void DisplaySystemMessage(FString Message);
 
 	// Interaction prompt
-	/*UFUNCTION(BlueprintCallable, Category = "UI")
-	void SetInteractionMessageVisibility(bool Visible);*/
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void SetInteractionMessageVisibility(bool Visible);
 
 };
