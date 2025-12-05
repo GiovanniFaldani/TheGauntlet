@@ -14,24 +14,12 @@ void ACPP_PlayerController::BeginPlay()
 		HUDWidgetInstance = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
 		if (HUDWidgetInstance)
 		{
-			// Add to viewport (Standard UMG way) or use CommonUI's Root Layout if configured
-			check(GEngine != nullptr);
-			GEngine->AddOnScreenDebugMessage(39, 0.1f, FColor::Green, TEXT("Player Controller correct init"));
+			// Add HUD to viewport
 			HUDWidgetInstance->AddToViewport();
 			FInputModeGameOnly GameInputMode;
 			SetInputMode(GameInputMode);
 			bShowMouseCursor = false;
 		}
-		else
-		{
-			check(GEngine != nullptr);
-			GEngine->AddOnScreenDebugMessage(94, 0.1f, FColor::Green, TEXT("HUDWidget Instance not found"));
-		}
-	}
-	else
-	{
-		check(GEngine != nullptr);
-		GEngine->AddOnScreenDebugMessage(97, 0.1f, FColor::Green, TEXT("HUDWidget Class not found"));
 	}
 }
 
@@ -39,7 +27,7 @@ void ACPP_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	// Add Input Mapping Context BEFORE the character sets up input bindings
+	// Add IMC BEFORE the character sets up input bindings
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		if (ACPP_Character* MyCharacter = Cast<ACPP_Character>(GetPawn()))

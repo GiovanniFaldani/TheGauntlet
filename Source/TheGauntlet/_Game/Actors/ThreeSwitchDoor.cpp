@@ -2,6 +2,8 @@
 
 
 #include "_Game/Actors/ThreeSwitchDoor.h"
+#include "Kismet/GameplayStatics.h"
+#include "../CPP_PlayerController.h"
 
 // Sets default values
 AThreeSwitchDoor::AThreeSwitchDoor()
@@ -36,8 +38,10 @@ void AThreeSwitchDoor::Deactivate()
 	SetActorEnableCollision(bIsActive);
 	SetActorTickEnabled(bIsActive);
 
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(26, 5.0f, FColor::Blue, TEXT("Deactivated blue door!"));
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(TEXT("Deactivated blue door!"));
 }
 
 void AThreeSwitchDoor::Activate()

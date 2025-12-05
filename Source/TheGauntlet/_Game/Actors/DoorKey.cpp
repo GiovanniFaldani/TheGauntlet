@@ -4,6 +4,7 @@
 #include "_Game/Actors/DoorKey.h"
 #include "Kismet/GameplayStatics.h"
 #include "../CPP_Character.h"
+#include "../CPP_PlayerController.h"
 
 // Sets default values
 ADoorKey::ADoorKey()
@@ -41,7 +42,6 @@ void ADoorKey::Tick(float DeltaTime)
 
 void ADoorKey::Interact_Implementation()
 {
-	check(GEngine != nullptr);
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	if (IsValid(PlayerController))
 	{
@@ -49,7 +49,7 @@ void ADoorKey::Interact_Implementation()
 		if (IsValid(PlayerCharacter))
 		{
 			PlayerCharacter->SetKeyCollected(true);
-			GEngine->AddOnScreenDebugMessage(40, 1.0f, FColor::Blue, TEXT("Collected Key"));
+			Cast<ACPP_PlayerController>(PlayerController)->PublishUIMessage(TEXT("Collected Key!"));
 		}
 	}
 }

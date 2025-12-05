@@ -2,6 +2,8 @@
 
 
 #include "_Game/Actors/SingleSwitch.h"
+#include "Kismet/GameplayStatics.h"
+#include "../CPP_PlayerController.h"
 
 // Sets default values
 ASingleSwitch::ASingleSwitch()
@@ -32,6 +34,11 @@ void ASingleSwitch::ActivateSwitch()
 	bIsActive = true;
 	Mesh->SetMaterial(0, BlueMaterial);
 	Door->SetSwitchTo(bIsActive, SwitchIndex);
+
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	if(!Door->CheckSwitches()) PlayerController->PublishUIMessage(TEXT("Activated a blue switch!"));
 
 }
 

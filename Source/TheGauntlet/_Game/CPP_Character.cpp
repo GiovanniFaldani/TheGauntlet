@@ -52,11 +52,8 @@ void ACPP_Character::BeginPlay()
 			PlayerController->bShowMouseCursor = false;
 		}
 	}
-	// Display a debug message for five seconds. 
-	// The -1 "Key" value argument prevents the message from being updated or refreshed.
-	check(GEngine != nullptr);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using CPP_Character."));
 
+	// Fill health bar
 	onHealthChanged.Broadcast(HP, MaxHP);
 }
 
@@ -132,10 +129,6 @@ void ACPP_Character::MoveCamera(const FInputActionValue& Value)
 void ACPP_Character::OnInteract()
 {
 	if (!CanInteract) return;
-
-	check(GEngine != nullptr);
-
-	GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Red, TEXT("Interact!"));
 
 	// Get ClosestActor from InteractionComponent and call Interact() on it.
 	if (IsValid(InteractionComponent->ClosestActor) && InteractionComponent->ClosestActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))

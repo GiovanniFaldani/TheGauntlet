@@ -2,6 +2,8 @@
 
 
 #include "_Game/Actors/TimerDoor.h"
+#include "Kismet/GameplayStatics.h"
+#include "../CPP_PlayerController.h"
 
 // Sets default values
 ATimerDoor::ATimerDoor()
@@ -46,9 +48,6 @@ void ATimerDoor::Deactivate()
 	SetActorEnableCollision(bIsActive);
 	SetActorTickEnabled(bIsActive);
 
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(19, 5.0f, FColor::Red, TEXT("Deactivated red door!"));
-
 	// Start timer
 	GetWorld()->GetTimerManager().SetTimer(
 		RespawnTimer,
@@ -57,6 +56,11 @@ void ATimerDoor::Deactivate()
 		DoorTimer,
 		false
 	);
+
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(TEXT("Deactivated timed red door!"));
 }
 
 void ATimerDoor::Activate()
@@ -67,7 +71,9 @@ void ATimerDoor::Activate()
 	SetActorEnableCollision(bIsActive);
 	SetActorTickEnabled(bIsActive);
 
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(18, 5.0f, FColor::Red, TEXT("Reactivated red door!"));
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(TEXT("Respawned timed red door!"));
 }
 

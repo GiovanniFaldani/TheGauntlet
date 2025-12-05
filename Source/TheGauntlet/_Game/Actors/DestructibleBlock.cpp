@@ -4,6 +4,7 @@
 #include "_Game/Actors/DestructibleBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "../CPP_Character.h"
+#include "../CPP_PlayerController.h"
 
 // Sets default values
 ADestructibleBlock::ADestructibleBlock()
@@ -49,11 +50,12 @@ void ADestructibleBlock::Interact_Implementation()
 	}
 }
 
-// TODO add timer or else it takes damage every frame
 void ADestructibleBlock::ReceiveDamage_Implementation(float DamageReceived)
 {
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(17, 1.0f, FColor::Red, FString::Printf(TEXT("Dealt %f.2 damage to obstacle!"), DamageReceived));
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(FString::Printf(TEXT("Dealt %.2f damage to obstacle!"), DamageReceived));
 
 	HP -= DamageReceived;
 	if(HP <=0.f)

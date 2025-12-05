@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "CPP_Character.h"
+#include "CPP_PlayerController.h"
 
 void ACPP_GameModeBase::BeginPlay()
 {
@@ -69,12 +70,13 @@ void ACPP_GameModeBase::PlayerFell()
 
 void ACPP_GameModeBase::GameVictory()
 {
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(25, 5.0f, FColor::Yellow, TEXT("Goal Reached!"));
-
 	// Freeze player
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreMoveInput(true);
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreLookInput(true);
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(TEXT("Victory!"));
+	PlayerController->SetIgnoreMoveInput(true);
+	PlayerController->SetIgnoreLookInput(true);
 
 	// Show the Victory Widget
 	ShowEndGameWidget(VictoryWidgetClass);
@@ -94,12 +96,13 @@ void ACPP_GameModeBase::GameVictory()
 
 void ACPP_GameModeBase::GameOver()
 {
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(35, 5.0f, FColor::Yellow, TEXT("Game Over!"));
-
 	// Freeze player
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreMoveInput(true);
-	UGameplayStatics::GetPlayerController(this, 0)->SetIgnoreLookInput(true);
+	ACPP_PlayerController* PlayerController = Cast<ACPP_PlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (!IsValid(PlayerController)) return;
+
+	PlayerController->PublishUIMessage(TEXT("Game Over!"));
+	PlayerController->SetIgnoreMoveInput(true);
+	PlayerController->SetIgnoreLookInput(true);
 
 	// Show the Game Over Widget
 	ShowEndGameWidget(GameOverWidgetClass);
